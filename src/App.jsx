@@ -9,6 +9,7 @@ import Reels from './pages/Reels';
 import CartPage from './pages/CartPage';
 import Checkout from './pages/Checkout';
 import OrderSuccess from './pages/OrderSuccess';
+import OrderCancel from './pages/OrderCancel';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import ForgotPassword from './pages/ForgotPassword';
@@ -36,6 +37,7 @@ export default function App() {
         <Route path="cart" element={<CartPage />} />
         <Route path="checkout" element={<Checkout />} />
         <Route path="order/success" element={<OrderSuccess />} />
+        <Route path="order/cancel" element={<OrderCancel />} />
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
         <Route path="forgot-password" element={<ForgotPassword />} />

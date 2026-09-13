@@ -3625,3 +3625,15 @@ table.data th.num {
     align-items: center;
     justify-content: center;
 }
+
+.order-cancel__icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto var(--sp-4);
+    border-radius: var(--radius-pill);
+    background: var(--red-bg);
+    color: var(--red);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
