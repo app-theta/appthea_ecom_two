@@ -159,15 +159,17 @@ export default function ProductDetails() {
 
   return (
     <div className="container">
-      <div className="breadcrumb">
-        <Link to="/">Home</Link><span>/</span>
-        {product.category?.name && (
-          <>
-            <Link to={'/shop/' + (product.category.slug || '')}>{product.category.name}</Link><span>/</span>
-          </>
-        )}
-        <span className="current">{product.name}</span>
-      </div>
+      {features.show_breedcrumb && (
+        <div className="breadcrumb">
+          <Link to="/">Home</Link><span>/</span>
+          {product.category?.name && (
+            <>
+              <Link to={'/shop/' + (product.category.slug || '')}>{product.category.name}</Link><span>/</span>
+            </>
+          )}
+          <span className="current">{product.name}</span>
+        </div>
+      )}
 
       <div className="pd-layout">
         <div>

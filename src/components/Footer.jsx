@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Icon } from './Icons';
 import { useBusiness } from '../context/BusinessContext';
@@ -10,8 +11,10 @@ const LINKS = [
 ];
 
 export default function Footer() {
-  const { info } = useBusiness();
+  const { info, features } = useBusiness();
   const name = info?.name || 'AppTheta';
+  const [email, setEmail] = useState('');
+  const [done, setDone] = useState(false);
 
   return (
     <footer className="site-footer">
@@ -42,6 +45,30 @@ export default function Footer() {
               <a href="#" aria-label="Messenger"><Icon.messenger /></a>
             </div>
           </div>
+          {features.is_subscribe_newsletter && (
+            <div className="footer-col">
+              <h4>Newsletter</h4>
+              {done ? (
+                <p className="footer-about">Thanks for subscribing!</p>
+              ) : (
+                <form
+                  style={{ display: 'flex', gap: 'var(--sp-2)' }}
+                  onSubmit={(e) => { e.preventDefault(); if (email.includes('@')) setDone(true); }}
+                >
+                  <input
+                    type="email"
+                    className="input"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="you@example.com"
+                    aria-label="Email address"
+                    required
+                  />
+                  <button type="submit" className="btn btn--primary">Join</button>
+                </form>
+              )}
+            </div>
+          )}
         </div>
         <div className="footer-bottom">
           © {new Date().getFullYear()} {name}. All rights reserved.

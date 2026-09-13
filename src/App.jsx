@@ -5,6 +5,7 @@ import ProtectedRoute from './routes/ProtectedRoute';
 import Home from './pages/Home';
 import Shop from './pages/Shop';
 import ProductDetails from './pages/ProductDetails';
+import Reels from './pages/Reels';
 import CartPage from './pages/CartPage';
 import Checkout from './pages/Checkout';
 import OrderSuccess from './pages/OrderSuccess';
@@ -17,6 +18,8 @@ import OrderDetail from './pages/account/OrderDetail';
 import Refund from './pages/account/Refund';
 import Wallet from './pages/account/Wallet';
 import Wishlist from './pages/account/Wishlist';
+import Profile from './pages/account/Profile';
+import Points from './pages/account/Points';
 import DeleteAccount from './pages/account/DeleteAccount';
 import NotFound from './pages/NotFound';
 
@@ -28,6 +31,8 @@ export default function App() {
         <Route path="shop" element={<Shop />} />
         <Route path="shop/:category" element={<Shop />} />
         <Route path="product/:id" element={<ProductDetails />} />
+        <Route path="reels" element={<Reels />} />
+        <Route path="reels/:slug" element={<Reels />} />
         <Route path="cart" element={<CartPage />} />
         <Route path="checkout" element={<Checkout />} />
         <Route path="order/success" element={<OrderSuccess />} />
@@ -41,6 +46,8 @@ export default function App() {
           <Route path="refund" element={<Refund />} />
           <Route path="wallet" element={<Wallet />} />
           <Route path="wishlist" element={<Wishlist />} />
+          <Route path="profile" element={<Profile />} />
+          <Route path="points" element={<Points />} />
           <Route path="delete" element={<DeleteAccount />} />
         </Route>
         <Route path="*" element={<NotFound />} />

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Icon } from '../components/Icons';
 import PageHead from '../components/PageHead';
@@ -10,6 +10,7 @@ import { useBusiness } from '../context/BusinessContext';
 import { checkout as checkoutApi } from '../api/endpoints';
 import { parseApiError, isPriceMismatch, needsOtp } from '../api/errors';
 import { money2 } from '../data/products';
+import { useCheckoutDraftAutosave } from '../hooks/useCheckoutDraftAutosave';
 
 export default function Checkout() {
   const navigate = useNavigate();
@@ -58,7 +59,24 @@ export default function Checkout() {
     return Math.max(0, subtotal + shippingCharge - discount);
   }, [applied, subtotal, shippingCharge, discount]);
 
-  const set = (k) => (e) => setForm({ ...form, [k]: e.target.value });
+  const getCartPayload = useCallback(() => ({ cart: apiCart(), grandTotal }), [apiCart, grandTotal]);
+  const { saveDraft } = useCheckoutDraftAutosave({ isLoggedIn: isAuthed, enabled: !!features.draft_orders, getCartPayload });
+
+  const set = (k) => (e) => {
+    const value = e.target.value;
+    const next = { ...form, [k]: value };
+    setForm(next);
+    if (k === 'phone') {
+      saveDraft({
+        full_name: next.name,
+        phone: next.phone,
+        email: next.email,
+        address: next.address,
+        city: '',
+        country: 'Bangladesh',
+      });
+    }
+  };
 
   const applyCoupon = async () => {
     if (!coupon.trim()) return;

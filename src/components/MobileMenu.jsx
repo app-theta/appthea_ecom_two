@@ -8,10 +8,14 @@ import { categoryNavTree } from '../utils/categoryTree';
 
 export default function MobileMenu() {
   const { menuOpen, setMenuOpen } = useCart();
-  const { info, categories } = useBusiness();
+  const { info, categories, features } = useBusiness();
   const navLinks = useMemo(
-    () => [{ label: 'Home', to: '/' }, ...categoryNavTree(categories)],
-    [categories],
+    () => [
+      { label: 'Home', to: '/' },
+      ...(features.product_reels ? [{ label: 'Reels', to: '/reels' }] : []),
+      ...categoryNavTree(categories),
+    ],
+    [categories, features.product_reels],
   );
 
   if (!menuOpen) return null;

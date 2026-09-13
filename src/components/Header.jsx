@@ -24,11 +24,15 @@ function Marquee({ address }) {
 
 export default function Header() {
   const { count, setDrawerOpen, setMenuOpen, setSearchOpen } = useCart();
-  const { info, categories } = useBusiness();
+  const { info, categories, features } = useBusiness();
 
   const navLinks = useMemo(
-    () => [{ label: 'Home', to: '/' }, ...categoryNavTree(categories, { limit: 5 })],
-    [categories],
+    () => [
+      { label: 'Home', to: '/' },
+      ...(features.product_reels ? [{ label: 'Reels', to: '/reels' }] : []),
+      ...categoryNavTree(categories, { limit: 5 }),
+    ],
+    [categories, features.product_reels],
   );
 
   return (

@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useState, useCallback } from 'react';
 import { checkout as checkoutApi } from '../api/endpoints';
 import { barcodePrice, variantLabel, productImages, barcodesOf } from '../utils/product';
+import { useBusiness } from './BusinessContext';
 
 const CartContext = createContext(null);
 const KEY = 'AppTheta_cart';
@@ -41,6 +42,7 @@ const read = () => {
 };
 
 export function CartProvider({ children }) {
+  const { features } = useBusiness();
   const [items, setItems] = useState(read);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [quickView, setQuickView] = useState(null);
@@ -118,8 +120,8 @@ export function CartProvider({ children }) {
       ];
     });
     setQuickView(null);
-    setDrawerOpen(true);
-  }, []);
+    if (features.open_cart) setDrawerOpen(true);
+  }, [features.open_cart]);
 
   /** entry: { product_id, barcode_id, qty, total_price, name, image, variant,
       free_items[], free_selections[] } - built by the product-details page from
@@ -142,8 +144,8 @@ export function CartProvider({ children }) {
       total_price: round2(entry.total_price),
     }]);
     setQuickView(null);
-    setDrawerOpen(true);
-  }, []);
+    if (features.open_cart) setDrawerOpen(true);
+  }, [features.open_cart]);
 
   /** entry: { bundle_id, qty, total_price, name, image, items[] (display labels),
       selections[] } - built by the product-details page from the chosen bundle.
@@ -164,8 +166,8 @@ export function CartProvider({ children }) {
       total_price: round2(entry.total_price),
     }]);
     setQuickView(null);
-    setDrawerOpen(true);
-  }, []);
+    if (features.open_cart) setDrawerOpen(true);
+  }, [features.open_cart]);
 
   /** Only simple lines are re-quantified in place - combo/bundle lines ignore
       this (they're remove-and-re-add only, see file header). */

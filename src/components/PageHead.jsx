@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom';
+import { useBusiness } from '../context/BusinessContext';
 
 export default function PageHead({ title, description, crumbs = [] }) {
+  const { features } = useBusiness();
   return (
     <>
-      {crumbs.length > 0 && (
+      {features.show_breedcrumb && crumbs.length > 0 && (
         <div className="breadcrumb">
           <Link to="/">Home</Link>
           {crumbs.map((c, i) => (

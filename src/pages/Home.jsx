@@ -6,6 +6,7 @@ import Img from '../components/Img';
 import { FEATURES } from '../data/products';
 import { useBusiness } from '../context/BusinessContext';
 import { useAsync } from '../hooks/useAsync';
+import { useSeoMeta } from '../hooks/useSeoMeta';
 import { home } from '../api/endpoints';
 import { paginated, imageUrl } from '../utils/product';
 
@@ -67,6 +68,7 @@ function Hero({ slides }) {
 }
 
 export default function Home() {
+  useSeoMeta('home');
   const { categories, sliders } = useBusiness();
   const summary = useAsync((signal) => home.summary({ per_page: 8 }, { signal }), []);
   const arrivals = paginated(summary.data?.latest).rows;

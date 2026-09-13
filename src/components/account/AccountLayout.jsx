@@ -1,6 +1,7 @@
 import { NavLink, Outlet, Link, useNavigate } from 'react-router-dom';
 import { Icon } from '../Icons';
 import { useAuth } from '../../context/AuthContext';
+import { useBusiness } from '../../context/BusinessContext';
 import { useWishlist } from '../../context/WishlistContext';
 import { useAsync } from '../../hooks/useAsync';
 import { account } from '../../api/endpoints';
@@ -8,6 +9,7 @@ import { initials } from '../../utils/format';
 
 export default function AccountLayout() {
   const { customer, logout } = useAuth();
+  const { features } = useBusiness();
   const wishlist = useWishlist();
   const navigate = useNavigate();
   const { data } = useAsync((signal) => account.dashboard({ signal }), []);
@@ -16,11 +18,13 @@ export default function AccountLayout() {
 
   const links = [
     { to: '/account', end: true, icon: 'grid', label: 'Dashboard' },
+    { to: '/account/profile', icon: 'user', label: 'Manage Profile' },
     { to: '/account/orders', icon: 'box', label: 'My Orders', badge: data?.total_orders },
     { to: '/account/refund', icon: 'refund', label: 'Refund Request' },
     { to: '/account/wallet', icon: 'wallet', label: 'Wallet' },
-    { to: '/account/wishlist', icon: 'heart', label: 'Wishlist', badge: wishlist.count || undefined },
-  ];
+    features.user_wishlist && { to: '/account/wishlist', icon: 'heart', label: 'Wishlist', badge: wishlist.count || undefined },
+    features.enable_customer_point_commission && { to: '/account/points', icon: 'star', label: 'Earning Points', badge: data?.customer?.point_balance || undefined },
+  ].filter(Boolean);
 
   const onLogout = async () => {
     await logout();
@@ -29,9 +33,11 @@ export default function AccountLayout() {
 
   return (
     <div className="container container-narrow">
-      <div className="breadcrumb">
-        <Link to="/">Home</Link><span>/</span><span className="current">My Account</span>
-      </div>
+      {features.show_breedcrumb && (
+        <div className="breadcrumb">
+          <Link to="/">Home</Link><span>/</span><span className="current">My Account</span>
+        </div>
+      )}
       <div className="account-layout">
         <aside className="account-side">
           <div className="account-user">

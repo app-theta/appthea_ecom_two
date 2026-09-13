@@ -8,6 +8,7 @@ import MobileMenu from './MobileMenu';
 import SearchPanel from './SearchPanel';
 import FloatingButtons from './FloatingButtons';
 import Toast from './Toast';
+import NewsletterPopup from './NewsletterPopup';
 import { useCart } from '../context/CartContext';
 
 export default function Layout() {
@@ -32,6 +33,7 @@ export default function Layout() {
       <QuickView />
       <CartDrawer />
       <Toast />
+      <NewsletterPopup />
     </>
   );
 }
