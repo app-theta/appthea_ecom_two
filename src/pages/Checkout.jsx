@@ -211,33 +211,39 @@ export default function Checkout() {
             </div>
 
             <h2 className="form-title" style={{ fontSize: 'var(--fs-2xl)', marginTop: 'var(--sp-7)' }}>
-              <Icon.truck /> Shipping Options
+              <Icon.truck />
+              Shipping Options
             </h2>
-            {[
-              { id: 'inside_city', label: 'Inside Dhaka', note: 'Delivery in 24-48 hours', price: shipping.inside },
-              { id: 'outside_city', label: 'Outside Dhaka', note: 'Delivery in 2-4 business days', price: shipping.outside },
-            ].map((s) => (
-              <label className={'opt-row' + (area === s.id ? ' is-active' : '')} key={s.id}>
-                <input type="radio" name="shipping" checked={area === s.id} onChange={() => setArea(s.id)} />
-                <span><strong>{s.label}</strong><small>{s.note}</small></span>
-                <span className="price">
-                  {shipping.freeAbove > 0 && subtotal >= shipping.freeAbove ? 'Free' : 'BDT ' + money2(s.price)}
-                </span>
-              </label>
-            ))}
+            <div className="grid-2">
+              {[
+                { id: 'inside_city', label: 'Inside Dhaka', note: 'Delivery in 24-48 hours', price: shipping.inside },
+                { id: 'outside_city', label: 'Outside Dhaka', note: 'Delivery in 2-4 business days', price: shipping.outside },
+              ].map((s) => (
+                <label className={'opt-row' + (area === s.id ? ' is-active' : '')} key={s.id}>
+                  <input type="radio" name="shipping" checked={area === s.id} onChange={() => setArea(s.id)} />
+                  <span><strong>{s.label}</strong><small>{s.note}</small></span>
+                  <span className="price">
+                    {shipping.freeAbove > 0 && subtotal >= shipping.freeAbove ? 'Free' : 'BDT ' + money2(s.price)}
+                  </span>
+                </label>
+              ))}
+            </div>
             <p className="form-note">Select the delivery area that matches your address.</p>
 
             {enabledPayments.length > 0 && (
               <>
                 <h2 className="form-title" style={{ fontSize: 'var(--fs-2xl)', marginTop: 'var(--sp-7)' }}>
-                  <Icon.check /> Payment Method
+                  <Icon.check />
+                  Payment Method
                 </h2>
-                {enabledPayments.map((type) => (
-                  <label className={'opt-row' + (payment === type ? ' is-active' : '')} key={type}>
-                    <input type="radio" name="payment" checked={payment === type} onChange={() => setPayment(type)} />
-                    <span><strong>{type}</strong><small>{type === 'Cash On Delivery' ? 'Pay when your order arrives' : 'Pay securely online'}</small></span>
-                  </label>
-                ))}
+                <div className="grid-3">
+                  {enabledPayments.map((type) => (
+                    <label className={'opt-row' + (payment === type ? ' is-active' : '')} key={type}>
+                      <input type="radio" name="payment" checked={payment === type} onChange={() => setPayment(type)} />
+                      <span><strong>{type}</strong><small>{type === 'Cash On Delivery' ? 'Pay when your order arrives' : 'Pay securely online'}</small></span>
+                    </label>
+                  ))}
+                </div>
               </>
             )}
           </div>

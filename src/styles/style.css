@@ -307,6 +307,12 @@ p {
     color: var(--accent);
 }
 
+.brand-logo-img {
+    display: block;
+    max-height: 40px;
+    width: auto;
+}
+
 .header-actions {
     display: flex;
     align-items: center;
@@ -2973,6 +2979,12 @@ table.data th.num {
     gap: var(--sp-4);
 }
 
+.grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--sp-4);
+}
+
 .danger-box {
     border: 1px solid #fda4af;
     background: #fff1f2;
@@ -3256,7 +3268,8 @@ table.data th.num {
         gap: var(--sp-3);
     }
 
-    .grid-2 {
+    .grid-2,
+    .grid-3 {
         grid-template-columns: 1fr;
     }
 

@@ -25,7 +25,9 @@ export default function MobileMenu() {
       <Overlay />
       <nav className="mobile-menu">
         <div className="mobile-menu__head">
-          <span className="brand" style={{ fontSize: 'var(--fs-6xl)' }}>{info?.name || 'AppTheta'}</span>
+          <span className="brand" style={{ fontSize: 'var(--fs-6xl)' }}>
+            {info?.logo ? <img src={info.logo} alt={info?.name || 'Home'} className="brand-logo-img" /> : (info?.name || 'AppTheta')}
+          </span>
           <button className="icon-btn" onClick={() => setMenuOpen(false)} aria-label="Close menu">
             <Icon.close width="20" height="20" />
           </button>

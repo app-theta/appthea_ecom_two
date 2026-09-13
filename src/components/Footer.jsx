@@ -21,7 +21,9 @@ export default function Footer() {
       <div className="container">
         <div className="footer-grid">
           <div>
-            <Link className="footer-brand" to="/">{name}</Link>
+            <Link className="footer-brand" to="/">
+              {info?.logo ? <img src={info.logo} alt={name} className="brand-logo-img" /> : name}
+            </Link>
             <p className="footer-about">
               <b>{name}</b> — your destination for the latest fashion trends.<br />
               {info?.address}<br />

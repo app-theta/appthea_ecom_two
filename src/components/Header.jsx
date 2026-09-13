@@ -55,7 +55,9 @@ export default function Header() {
             </form>
           </div>
 
-          <Link className="brand" to="/">{info?.name || 'AppTheta'}</Link>
+          <Link className="brand" to="/">
+            {info?.logo ? <img src={info.logo} alt={info?.name || 'Home'} className="brand-logo-img" /> : (info?.name || 'AppTheta')}
+          </Link>
 
           <div className="header-actions">
             <button className="icon-btn mobile-search-btn" aria-label="Search" onClick={() => setSearchOpen(true)}>
