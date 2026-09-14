@@ -69,7 +69,6 @@ export default function CartPage() {
           <div className="card">
             <div className="card__body">
               <div className="summary-row"><span>Subtotal</span><strong>BDT {money2(subtotal)}</strong></div>
-              <p className="summary-note">Shipping calculated at checkout</p>
               <div className="summary-total">
                 <strong>Total</strong>
                 <b>BDT {money2(subtotal)}</b>
@@ -77,7 +76,6 @@ export default function CartPage() {
               <Link className="btn btn--primary btn--block btn--lg" to="/checkout">Proceed to Checkout</Link>
               <div style={{ height: 'var(--sp-3)' }} />
               <Link className="btn btn--outline btn--block btn--lg" to="/shop">Continue Shopping</Link>
-              <p className="summary-fineprint">Free returns and exchanges for 7 days</p>
             </div>
           </div>
         </aside>

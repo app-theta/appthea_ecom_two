@@ -1342,6 +1342,18 @@ p {
     padding: var(--sp-5) 0 var(--sp-7);
 }
 
+@media (max-width: 767px) {
+    .shop-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .shop-toolbar .select,
+    .shop-toolbar input {
+        width: 100%;
+    }
+}
+
 .shop-toolbar label {
     font-size: var(--fs-sm);
     color: var(--ink-soft);
@@ -2273,6 +2285,26 @@ p {
     margin-top: var(--sp-5);
 }
 
+.footer-subscribe {
+    display: flex;
+    margin-top: var(--sp-4);
+}
+
+.footer-subscribe .input {
+    flex: 1;
+    min-width: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right: none;
+}
+
+.footer-subscribe .btn {
+    flex: none;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    white-space: nowrap;
+}
+
 .footer-social a {
     width: 40px;
     height: 40px;
@@ -2802,7 +2834,7 @@ table.data th.num {
     padding-block: var(--sp-4);
 }
 
-.order-item + .order-item {
+.order-item+.order-item {
     border-top: 1px solid var(--line);
 }
 

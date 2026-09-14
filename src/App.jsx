@@ -6,6 +6,7 @@ import Home from './pages/Home';
 import Shop from './pages/Shop';
 import ProductDetails from './pages/ProductDetails';
 import Reels from './pages/Reels';
+import Policy from './pages/Policy';
 import CartPage from './pages/CartPage';
 import Checkout from './pages/Checkout';
 import OrderSuccess from './pages/OrderSuccess';
@@ -34,6 +35,11 @@ export default function App() {
         <Route path="product/:id" element={<ProductDetails />} />
         <Route path="reels" element={<Reels />} />
         <Route path="reels/:slug" element={<Reels />} />
+        <Route path="privacy" element={<Policy field="privacy_policy" title="Privacy Policy" />} />
+        <Route path="terms" element={<Policy field="terms_condition" title="Terms & Conditions" />} />
+        <Route path="shipping-policy" element={<Policy field="shipping_policy" title="Shipping Policy" />} />
+        <Route path="refund-policy" element={<Policy field="refund_policy" title="Refund Policy" />} />
+        <Route path="return-policy" element={<Policy field="return_policy" title="Return Policy" />} />
         <Route path="cart" element={<CartPage />} />
         <Route path="checkout" element={<Checkout />} />
         <Route path="order/success" element={<OrderSuccess />} />

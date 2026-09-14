@@ -189,16 +189,29 @@ export default function Checkout() {
           <div className="card__body">
             <h2 className="form-title"><Icon.bag /> Billing Details</h2>
 
-            <div className="field phone-row">
-              <span className="phone-prefix">+88</span>
-              <input className="input" type="tel" placeholder="Phone number" value={form.phone} onChange={set('phone')} required />
+            <div className="grid-2">
+              <div>
+                <div className="field"><input className="input" placeholder="Full name" value={form.name} onChange={set('name')} required /></div>
+                {errors.full_name && <div className="review-form__error">{errors.full_name}</div>}
+              </div>
+              <div>
+                <div className="field">
+                  <input className="input" type="tel" placeholder="Phone number" value={form.phone} onChange={set('phone')} required />
+                </div>
+                {errors.phone && <div className="review-form__error">{errors.phone}</div>}
+              </div>
             </div>
-            {errors.phone && <div className="review-form__error">{errors.phone}</div>}
-            <div className="field"><input className="input" placeholder="Full name" value={form.name} onChange={set('name')} required /></div>
-            {errors.full_name && <div className="review-form__error">{errors.full_name}</div>}
-            <div className="field"><input className="input" type="email" placeholder="Email address" value={form.email} onChange={set('email')} /></div>
-            <div className="field"><input className="input" placeholder="Full address (house, road, block, area)" value={form.address} onChange={set('address')} required /></div>
-            {errors.address && <div className="review-form__error">{errors.address}</div>}
+
+            <div className="grid-2">
+              <div>
+                <div className="field"><input className="input" type="email" placeholder="Email address" value={form.email} onChange={set('email')} /></div>
+              </div>
+              <div>
+                <div className="field"><input className="input" placeholder="Full address (house, road, block, area)" value={form.address} onChange={set('address')} required /></div>
+                {errors.address && <div className="review-form__error">{errors.address}</div>}
+              </div>
+            </div>
+
             <div className="field">
               <label htmlFor="notes">Order notes (optional)</label>
               <textarea className="textarea" id="notes" placeholder="Special instructions for delivery..." value={form.notes} onChange={set('notes')} />

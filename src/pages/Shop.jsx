@@ -76,11 +76,6 @@ export default function Shop() {
     <div className="container">
       <PageHead
         title={collection ? collection.name : 'All Products'}
-        description={
-          collection
-            ? undefined
-            : 'Browse the full AppTheta wardrobe — panjabi, shirts, tees, polos, trousers and the finishing details.'
-        }
         crumbs={collection ? [{ label: 'Shop', to: '/shop' }, { label: collection.name }] : [{ label: 'Shop' }]}
       />
 

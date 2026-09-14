@@ -5,8 +5,11 @@ import { useBusiness } from '../context/BusinessContext';
 
 const LINKS = [
   { label: 'About us', to: '/shop' },
-  { label: 'Privacy Policy', to: '/shop' },
-  { label: 'Terms and Conditions', to: '/shop' },
+  { label: 'Privacy Policy', to: '/privacy' },
+  { label: 'Terms and Conditions', to: '/terms' },
+  { label: 'Shipping Policy', to: '/shipping-policy' },
+  { label: 'Refund Policy', to: '/refund-policy' },
+  { label: 'Return Policy', to: '/return-policy' },
   { label: 'My Account', to: '/account' }
 ];
 
@@ -41,20 +44,13 @@ export default function Footer() {
           </div>
           <div className="footer-col">
             <h4>Follow Us</h4>
-            <div className="footer-social">
-              <a href={info?.facebook_link || '#'} aria-label="Facebook"><Icon.facebook /></a>
-              <a href={info?.instagram_link || '#'} aria-label="Instagram"><Icon.instagram /></a>
-              <a href="#" aria-label="Messenger"><Icon.messenger /></a>
-            </div>
-          </div>
-          {features.is_subscribe_newsletter && (
-            <div className="footer-col">
-              <h4>Newsletter</h4>
-              {done ? (
+
+            {features.is_subscribe_newsletter && (
+              done ? (
                 <p className="footer-about">Thanks for subscribing!</p>
               ) : (
                 <form
-                  style={{ display: 'flex', gap: 'var(--sp-2)' }}
+                  className="footer-subscribe"
                   onSubmit={(e) => { e.preventDefault(); if (email.includes('@')) setDone(true); }}
                 >
                   <input
@@ -68,9 +64,15 @@ export default function Footer() {
                   />
                   <button type="submit" className="btn btn--primary">Join</button>
                 </form>
-              )}
+              )
+            )}
+
+            <div className="footer-social">
+              <a href={info?.facebook_link || '#'} aria-label="Facebook"><Icon.facebook /></a>
+              <a href={info?.instagram_link || '#'} aria-label="Instagram"><Icon.instagram /></a>
+              <a href="#" aria-label="Messenger"><Icon.messenger /></a>
             </div>
-          )}
+          </div>
         </div>
         <div className="footer-bottom">
           © {new Date().getFullYear()} {name}. All rights reserved.
