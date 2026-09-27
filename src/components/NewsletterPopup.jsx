@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Icon } from './Icons';
 import { useBusiness } from '../context/BusinessContext';
+import { useSubscribe } from '../hooks/useSubscribe';
 
 const SEEN_KEY = 'apptheta_newsletter_seen';
 
@@ -11,7 +12,7 @@ export default function NewsletterPopup() {
   const { features, info } = useBusiness();
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState('');
-  const [done, setDone] = useState(false);
+  const newsletter = useSubscribe();
 
   useEffect(() => {
     if (!features.newsletter_popup) return;
@@ -27,9 +28,11 @@ export default function NewsletterPopup() {
     try { localStorage.setItem(SEEN_KEY, '1'); } catch { /* ignore */ }
   };
 
-  const subscribe = (e) => {
+  const subscribe = async (e) => {
     e.preventDefault();
-    setDone(true);
+    if (await newsletter.subscribe(email)) {
+      try { localStorage.setItem(SEEN_KEY, '1'); } catch { /* ignore */ }
+    }
   };
 
   if (!open) return null;
@@ -44,7 +47,7 @@ export default function NewsletterPopup() {
           </button>
           <div>
             <h3 className="qv-title">Join our newsletter</h3>
-            {done ? (
+            {newsletter.done ? (
               <p className="mb-0">Thanks for subscribing!</p>
             ) : (
               <>
@@ -61,7 +64,8 @@ export default function NewsletterPopup() {
                       aria-label="Email address"
                     />
                   </div>
-                  <button type="submit" className="btn btn--primary btn--block">Subscribe</button>
+                  {newsletter.error && <div className="review-form__error" style={{ marginBottom: 'var(--sp-3)' }}>{newsletter.error}</div>}
+                  <button type="submit" className="btn btn--primary btn--block" disabled={newsletter.busy}>Subscribe</button>
                 </form>
               </>
             )}

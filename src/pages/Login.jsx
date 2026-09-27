@@ -2,12 +2,11 @@ import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Icon } from '../components/Icons';
 import { useAuth } from '../context/AuthContext';
-import { useBusiness } from '../context/BusinessContext';
 import { parseApiError } from '../api/errors';
+import SocialLogin from '../components/SocialLogin';
 
 export default function Login() {
   const { login } = useAuth();
-  const { features } = useBusiness();
   const navigate = useNavigate();
   const location = useLocation();
   const [show, setShow] = useState(false);
@@ -75,14 +74,7 @@ export default function Login() {
             </button>
           </form>
 
-          {(features.google_status || features.facebook_status) && (
-            <>
-              <div className="auth-or">or continue with</div>
-              {features.google_status && (
-                <button className="btn-google" type="button"><Icon.google width="20" height="20" /> Google</button>
-              )}
-            </>
-          )}
+          <SocialLogin onDone={() => navigate(location.state?.from || '/account', { replace: true })} />
           <p className="auth-foot">Don&apos;t have an account? <Link to="/register">Register</Link></p>
         </div>
       </div>

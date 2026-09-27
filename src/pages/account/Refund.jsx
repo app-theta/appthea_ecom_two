@@ -1,133 +1,59 @@
-import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import AccountHead from '../../components/account/AccountHead';
-import { useCart } from '../../context/CartContext';
-import { ORDERS, REFUNDS, REFUND_REASONS, REFUND_METHODS, REFUND_TIMELINE } from '../../data/account';
-import { money } from '../../data/products';
+import { ReturnCard } from '../../components/account/OrderReturns';
+import { account, returns as returnsApi } from '../../api/endpoints';
+import { useAsync } from '../../hooks/useAsync';
+import { paginated } from '../../utils/product';
+import { dateShort } from '../../utils/format';
 
+/**
+ * Returns & refunds: every return request the customer made, and the delivered orders they can
+ * still ask a return for (the request itself is made on the order's page, item by item).
+ */
 export default function Refund() {
-  const { setToast } = useCart();
-  const [orderId, setOrderId] = useState(ORDERS[0].id);
-  const [reason, setReason] = useState(REFUND_REASONS[0].value);
-  const [method, setMethod] = useState(REFUND_METHODS[0].value);
-  const [details, setDetails] = useState('');
-
-  const order = ORDERS.find((o) => o.id === orderId);
-  const [itemIndex, setItemIndex] = useState(0);
-
-  const submit = (e) => {
-    e.preventDefault();
-    if (!details.trim() && reason === 'other') {
-      setToast('Please describe the issue');
-      return;
-    }
-    setToast('Refund request submitted for ' + orderId);
-    setDetails('');
-  };
+  const mine = useAsync((signal) => returnsApi.mine({ per_page: 50 }, { signal }), []);
+  const delivered = useAsync((signal) => account.orders({ status: 'Delivery', per_page: 20 }, { signal }), []);
+  const requests = paginated(mine.data).rows;
+  const orders = paginated(delivered.data).rows;
+  // an order with a request still open can't take another one yet
+  const inProgress = new Set(requests.filter((r) => ['Requested', 'Approved'].includes(r.status)).map((r) => r.order?.id));
 
   return (
     <>
-      <AccountHead title="Refund Request" description="Tell us what went wrong and we will process your refund within 3-5 business days." />
+      <AccountHead title="Returns & Refunds" description="Send back something from a delivered order, and follow your requests." />
 
       <div className="panel">
-        <div className="panel__head"><h2>New Request</h2></div>
+        <div className="panel__head"><h2>Ask for a return</h2></div>
         <div className="panel__body">
-          <form onSubmit={submit}>
-            <div className="grid-2">
-              <div className="field">
-                <label htmlFor="order">Select order</label>
-                <select
-                  className="select" id="order" style={{ width: '100%' }}
-                  value={orderId}
-                  onChange={(e) => { setOrderId(e.target.value); setItemIndex(0); }}
-                >
-                  {ORDERS.map((o) => (
-                    <option key={o.id} value={o.id}>{o.id} — {o.date} — BDT {money(o.total)}</option>
-                  ))}
-                </select>
+          {delivered.loading ? (
+            <div className="empty-state">Loading…</div>
+          ) : orders.length === 0 ? (
+            <p className="form-note">Only delivered orders can be returned. You have none yet.</p>
+          ) : (
+            orders.map((o) => (
+              <div key={o.id} className="summary-row" style={{ alignItems: 'center' }}>
+                <span><strong>{o.invoice_no}</strong> <small className="form-note">· delivered order from {dateShort(o.date)}</small></span>
+                {inProgress.has(o.id)
+                  ? <span className="pill pill--pending">Return in progress</span>
+                  : <Link className="btn btn--sm btn--outline" to={'/account/orders/' + o.id + '#returns'}>Return items</Link>}
               </div>
-              <div className="field">
-                <label htmlFor="item">Select item</label>
-                <select
-                  className="select" id="item" style={{ width: '100%' }}
-                  value={itemIndex}
-                  onChange={(e) => setItemIndex(Number(e.target.value))}
-                >
-                  {order.items.map((i, n) => (
-                    <option key={i.product.id + i.size} value={n}>{i.product.name} (Size {i.size})</option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            <span className="label">Reason for refund</span>
-            {REFUND_REASONS.map((r) => (
-              <label className={'opt-row' + (reason === r.value ? ' is-active' : '')} key={r.value}>
-                <input type="radio" name="reason" checked={reason === r.value} onChange={() => setReason(r.value)} />
-                <span><strong>{r.title}</strong><small>{r.note}</small></span>
-                <span />
-              </label>
-            ))}
-
-            <div className="field" style={{ marginTop: 'var(--sp-5)' }}>
-              <label htmlFor="details">Details</label>
-              <textarea
-                className="textarea" id="details" placeholder="Describe the issue in a few lines..."
-                value={details} onChange={(e) => setDetails(e.target.value)}
-              />
-            </div>
-
-            <div className="field">
-              <label>Upload photos (optional)</label>
-              <div className="upload-box">Drag images here or <a href="#">browse</a><br />JPG or PNG, up to 5 MB each</div>
-            </div>
-
-            <span className="label">Refund to</span>
-            {REFUND_METHODS.map((m) => (
-              <label className={'opt-row' + (method === m.value ? ' is-active' : '')} key={m.value}>
-                <input type="radio" name="method" checked={method === m.value} onChange={() => setMethod(m.value)} />
-                <span><strong>{m.title}</strong><small>{m.note}</small></span>
-                <span className="price">{m.tag}</span>
-              </label>
-            ))}
-
-            <button className="btn btn--primary btn--lg" style={{ marginTop: 'var(--sp-5)' }} type="submit">
-              Submit Request
-            </button>
-          </form>
+            ))
+          )}
         </div>
       </div>
 
-      <div className="panel">
-        <div className="panel__head"><h2>Request History</h2></div>
-        <div className="table-wrap">
-          <table className="data">
-            <thead>
-              <tr><th>Request</th><th>Order</th><th>Reason</th><th>Date</th><th>Status</th><th className="num">Amount</th></tr>
-            </thead>
-            <tbody>
-              {REFUNDS.map((r) => (
-                <tr key={r.id}>
-                  <td>{r.id}</td><td>{r.order}</td><td>{r.reason}</td><td>{r.date}</td>
-                  <td><span className={'pill pill--' + r.tone}>{r.status}</span></td>
-                  <td className="num">BDT {money(r.amount)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div className="panel">
-        <div className="panel__head"><h2>{REFUNDS[0].id} Progress</h2></div>
+      <div className="panel" style={{ marginTop: 'var(--sp-5)' }}>
+        <div className="panel__head"><h2>Your requests</h2></div>
         <div className="panel__body">
-          <div className="timeline">
-            {REFUND_TIMELINE.map((t) => (
-              <div className={'timeline-item' + (t.done ? ' is-done' : '')} key={t.title}>
-                <span className="timeline-dot" />
-                <div><strong>{t.title}</strong><small>{t.note}</small></div>
-              </div>
-            ))}
-          </div>
+          {mine.loading ? (
+            <div className="empty-state">Loading…</div>
+          ) : mine.error ? (
+            <div className="empty-state">{mine.error.message}</div>
+          ) : requests.length === 0 ? (
+            <div className="empty-state">You have not asked for a return yet.</div>
+          ) : (
+            requests.map((r) => <ReturnCard key={r.id} item={r} showOrder />)
+          )}
         </div>
       </div>
     </>

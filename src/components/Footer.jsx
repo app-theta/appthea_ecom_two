@@ -2,9 +2,12 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Icon } from './Icons';
 import { useBusiness } from '../context/BusinessContext';
+import { useSubscribe } from '../hooks/useSubscribe';
 
 const LINKS = [
-  { label: 'About us', to: '/shop' },
+  { label: 'Blog', to: '/blog' },
+  { label: 'FAQ', to: '/faq' },
+  { label: 'Contact us', to: '/contact' },
   { label: 'Privacy Policy', to: '/privacy' },
   { label: 'Terms and Conditions', to: '/terms' },
   { label: 'Shipping Policy', to: '/shipping-policy' },
@@ -17,7 +20,24 @@ export default function Footer() {
   const { info, features } = useBusiness();
   const name = info?.name || 'AppTheta';
   const [email, setEmail] = useState('');
-  const [done, setDone] = useState(false);
+  const newsletter = useSubscribe();
+
+  const normalizeUrl = (url) => {
+    if (!url || typeof url !== 'string') return null;
+    const trimmed = url.trim();
+    if (!trimmed) return null;
+    return /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+  };
+
+  // only the networks the shop has actually filled in
+  const socials = [
+    { url: normalizeUrl(info?.facebook_link), label: 'Facebook', icon: Icon.facebook },
+    { url: normalizeUrl(info?.instagram_link), label: 'Instagram', icon: Icon.instagram },
+    { url: normalizeUrl(info?.x_link || info?.twitter_link), label: 'X', icon: Icon.x },
+    { url: normalizeUrl(info?.linkedin_link), label: 'LinkedIn', icon: Icon.linkedin },
+    { url: normalizeUrl(info?.youtube_link), label: 'YouTube', icon: Icon.youtube },
+    { url: normalizeUrl(info?.whatsapp_link), label: 'WhatsApp', icon: Icon.whatsapp },
+  ].filter((s) => Boolean(s.url));
 
   return (
     <footer className="site-footer">
@@ -46,12 +66,12 @@ export default function Footer() {
             <h4>Follow Us</h4>
 
             {features.is_subscribe_newsletter && (
-              done ? (
+              newsletter.done ? (
                 <p className="footer-about">Thanks for subscribing!</p>
               ) : (
                 <form
                   className="footer-subscribe"
-                  onSubmit={(e) => { e.preventDefault(); if (email.includes('@')) setDone(true); }}
+                  onSubmit={(e) => { e.preventDefault(); newsletter.subscribe(email); }}
                 >
                   <input
                     type="email"
@@ -62,16 +82,19 @@ export default function Footer() {
                     aria-label="Email address"
                     required
                   />
-                  <button type="submit" className="btn btn--primary">Join</button>
+                  <button type="submit" className="btn btn--primary" disabled={newsletter.busy}>Join</button>
                 </form>
               )
             )}
+            {newsletter.error && <p className="footer-about">{newsletter.error}</p>}
 
-            <div className="footer-social">
-              <a href={info?.facebook_link || '#'} aria-label="Facebook"><Icon.facebook /></a>
-              <a href={info?.instagram_link || '#'} aria-label="Instagram"><Icon.instagram /></a>
-              <a href="#" aria-label="Messenger"><Icon.messenger /></a>
-            </div>
+            {socials.length > 0 && (
+              <div className="footer-social">
+                {socials.map((s) => (
+                  <a key={s.label} href={s.url} target="_blank" rel="noreferrer" aria-label={s.label}><s.icon /></a>
+                ))}
+              </div>
+            )}
           </div>
         </div>
         <div className="footer-bottom">

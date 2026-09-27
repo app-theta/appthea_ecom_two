@@ -20,7 +20,7 @@ export default function AccountLayout() {
     { to: '/account', end: true, icon: 'grid', label: 'Dashboard' },
     { to: '/account/profile', icon: 'user', label: 'Manage Profile' },
     { to: '/account/orders', icon: 'box', label: 'My Orders', badge: data?.total_orders },
-    { to: '/account/refund', icon: 'refund', label: 'Refund Request' },
+    { to: '/account/refund', icon: 'refund', label: 'Returns & Refunds' },
     { to: '/account/wallet', icon: 'wallet', label: 'Wallet' },
     features.user_wishlist && { to: '/account/wishlist', icon: 'heart', label: 'Wishlist', badge: wishlist.count || undefined },
     features.enable_customer_point_commission && { to: '/account/points', icon: 'star', label: 'Earning Points', badge: data?.customer?.point_balance || undefined },

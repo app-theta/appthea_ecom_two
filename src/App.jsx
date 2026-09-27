@@ -14,6 +14,10 @@ import OrderCancel from './pages/OrderCancel';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import ForgotPassword from './pages/ForgotPassword';
+import Blog from './pages/Blog';
+import BlogPost from './pages/BlogPost';
+import Faq from './pages/Faq';
+import Contact from './pages/Contact';
 import Overview from './pages/account/Overview';
 import Orders from './pages/account/Orders';
 import OrderDetail from './pages/account/OrderDetail';
@@ -47,6 +51,12 @@ export default function App() {
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
         <Route path="forgot-password" element={<ForgotPassword />} />
+        {/* the mailed reset link: /reset-password?token=…&email=… */}
+        <Route path="reset-password" element={<ForgotPassword />} />
+        <Route path="blog" element={<Blog />} />
+        <Route path="blog/:slug" element={<BlogPost />} />
+        <Route path="faq" element={<Faq />} />
+        <Route path="contact" element={<Contact />} />
         <Route path="account" element={<ProtectedRoute><AccountLayout /></ProtectedRoute>}>
           <Route index element={<Overview />} />
           <Route path="orders" element={<Orders />} />

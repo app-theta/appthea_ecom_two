@@ -5,6 +5,8 @@ import { useAsync } from '../../hooks/useAsync';
 import { account } from '../../api/endpoints';
 import { paginated } from '../../utils/product';
 import { statusTone, dateShort } from '../../utils/format';
+import { useCart } from '../../context/CartContext';
+import { parseApiError } from '../../api/errors';
 
 const STATUSES = ['All orders', 'Pending', 'Processing', 'Confirmed', 'Delivery', 'Cancelled'];
 
@@ -21,13 +23,17 @@ export default function Orders() {
     [JSON.stringify(query)],
   );
   const { rows, total } = paginated(data);
+  const { setToast } = useCart();
 
   const cancelOrder = async (id) => {
-    if (!window.confirm('Cancel this order?')) return;
+    if (!window.confirm('Cancel this order? This cannot be undone.')) return;
     try {
-      await account.deleteOrder(id);
+      await account.cancelOrder(id);
+      setToast('Your order was cancelled');
       reload();
-    } catch { /* leave as-is, list stays unchanged */ }
+    } catch (e) {
+      setToast(parseApiError(e).message);
+    }
   };
 
   const downloadInvoice = async (id) => {
@@ -53,7 +59,7 @@ export default function Orders() {
         </div>
       </div>
 
-      {loading ? (
+      {loading && !data ? (
         <div className="panel"><div className="empty-state">Loading…</div></div>
       ) : error ? (
         <div className="panel"><div className="empty-state">{error.message}</div></div>
@@ -70,7 +76,7 @@ export default function Orders() {
               <span className="total">Total: <b>BDT {Number(o.total_amount).toFixed(2)}</b></span>
               <Link className="btn btn--sm btn--ghost" to={'/account/orders/' + o.id}>View Details</Link>
               <button className="btn btn--sm btn--ghost" onClick={() => downloadInvoice(o.id)}>Invoice</button>
-              {['Pending', 'Processing'].includes(o.sale_status) && (
+              {o.can_cancel && (
                 <button className="btn btn--sm btn--danger" onClick={() => cancelOrder(o.id)}>Cancel</button>
               )}
             </div>
