@@ -1,6 +1,7 @@
 import { Icon } from './Icons';
 import { useCart } from '../context/CartContext';
 import { useBusiness } from '../context/BusinessContext';
+import { ChatFab } from './chat/ChatWidget';
 
 export default function FloatingButtons() {
   const { count, setDrawerOpen } = useCart();
@@ -10,6 +11,7 @@ export default function FloatingButtons() {
 
   return (
     <div className="floating">
+      <ChatFab />
       {facebook && (
         <a className="fab fab--messenger" href={facebook} target="_blank" rel="noreferrer" aria-label="Message us on Facebook"><Icon.messenger /></a>
       )}

@@ -6,6 +6,7 @@ import { BusinessProvider } from './context/BusinessContext';
 import { AuthProvider } from './context/AuthContext';
 import { WishlistProvider } from './context/WishlistContext';
 import { CartProvider } from './context/CartContext';
+import { ChatProvider } from './context/ChatContext';
 import './styles/style.css';
 
 createRoot(document.getElementById('root')).render(
@@ -15,7 +16,9 @@ createRoot(document.getElementById('root')).render(
         <AuthProvider>
           <WishlistProvider>
             <CartProvider>
-              <App />
+              <ChatProvider>
+                <App />
+              </ChatProvider>
             </CartProvider>
           </WishlistProvider>
         </AuthProvider>

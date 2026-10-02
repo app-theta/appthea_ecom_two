@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Icon } from '../components/Icons';
 import { useAuth } from '../context/AuthContext';
 import { parseApiError } from '../api/errors';
@@ -8,6 +8,9 @@ import SocialLogin from '../components/SocialLogin';
 export default function Register() {
   const { register } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  // came here from somewhere that needs an account (e.g. the chat) - go back there after
+  const back = location.state?.from || '/account';
   const [show, setShow] = useState(false);
   const [form, setForm] = useState({
     first_name: '', last_name: '', phone: '', email: '', password: '', password_confirmation: '',
@@ -24,7 +27,7 @@ export default function Register() {
     setBusy(true); setErrors({}); setError('');
     try {
       await register(form);
-      navigate('/account', { replace: true });
+      navigate(back, { replace: true });
     } catch (err) {
       const parsed = parseApiError(err);
       setErrors(parsed.fields);
@@ -82,7 +85,7 @@ export default function Register() {
             </button>
           </form>
 
-          <SocialLogin onDone={() => navigate('/account', { replace: true })} />
+          <SocialLogin onDone={() => navigate(back, { replace: true })} />
           <p className="auth-foot">Already have an account? <Link to="/login">Login</Link></p>
         </div>
       </div>

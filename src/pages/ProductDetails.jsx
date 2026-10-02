@@ -11,6 +11,7 @@ import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { useBusiness } from '../context/BusinessContext';
 import { useWishlist } from '../context/WishlistContext';
+import { useChat } from '../context/ChatContext';
 import { useAsync } from '../hooks/useAsync';
 import { catalog } from '../api/endpoints';
 import { money } from '../data/products';
@@ -26,6 +27,7 @@ export default function ProductDetails() {
   const { isAuthed } = useAuth();
   const { features, enabledPayments } = useBusiness();
   const wishlist = useWishlist();
+  const chat = useChat();
 
   const { data: product, loading, error } = useAsync((signal) => catalog.product(slug, { signal }), [slug]);
 
@@ -318,6 +320,12 @@ export default function ProductDetails() {
               Buy Now
             </button>
           </div>
+
+          {chat.enabled && (
+            <button type="button" className="btn btn--ghost chat-ask" onClick={() => chat.openChat({ product: { id: product.id, title: product.name, image: thumbOf(product) } })}>
+              <Icon.chat width="18" height="18" /> Ask about this product
+            </button>
+          )}
 
           {features.is_coupon && (
             <>

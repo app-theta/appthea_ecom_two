@@ -7,12 +7,14 @@ import { useAsync } from '../../hooks/useAsync';
 import { statusTone, dateShort } from '../../utils/format';
 import { imageUrl, num } from '../../utils/product';
 import { useCart } from '../../context/CartContext';
+import { useChat } from '../../context/ChatContext';
 import { parseApiError } from '../../api/errors';
 import OrderReturns from '../../components/account/OrderReturns';
 
 export default function OrderDetail() {
   const { id } = useParams();
   const { setToast } = useCart();
+  const chat = useChat();
   const { data, loading, error, reload } = useAsync((signal) => account.orderDetails(id, { signal }), [id]);
 
   // reloads (after cancel / a return) keep the page on screen
@@ -61,6 +63,11 @@ export default function OrderDetail() {
           <span className={'pill pill--' + (o.sale_paid_status === 'Paid' ? 'success' : 'pending')}>{o.sale_paid_status}</span>
         )}
         <button className="btn btn--sm btn--ghost" onClick={download}>Download invoice</button>
+        {chat.enabled && (
+          <button className="btn btn--sm btn--ghost" onClick={() => chat.openChat({ order: { id: o.id, invoice_no: o.invoice_no || o.unique_code || ('#' + o.id) } })}>
+            <Icon.chat width="16" height="16" /> Help with this order
+          </button>
+        )}
         {o.can_cancel && <button className="btn btn--sm btn--danger" onClick={cancel}>Cancel order</button>}
       </div>
 

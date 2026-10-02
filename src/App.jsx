@@ -27,6 +27,7 @@ import Wishlist from './pages/account/Wishlist';
 import Profile from './pages/account/Profile';
 import Points from './pages/account/Points';
 import DeleteAccount from './pages/account/DeleteAccount';
+import Chat from './pages/account/Chat';
 import NotFound from './pages/NotFound';
 
 export default function App() {
@@ -66,6 +67,7 @@ export default function App() {
           <Route path="wishlist" element={<Wishlist />} />
           <Route path="profile" element={<Profile />} />
           <Route path="points" element={<Points />} />
+          <Route path="chat" element={<Chat />} />
           <Route path="delete" element={<DeleteAccount />} />
         </Route>
         <Route path="*" element={<NotFound />} />

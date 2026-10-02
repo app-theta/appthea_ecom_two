@@ -3,6 +3,7 @@ import { Icon } from '../Icons';
 import { useAuth } from '../../context/AuthContext';
 import { useBusiness } from '../../context/BusinessContext';
 import { useWishlist } from '../../context/WishlistContext';
+import { useChat } from '../../context/ChatContext';
 import { useAsync } from '../../hooks/useAsync';
 import { account } from '../../api/endpoints';
 import { initials } from '../../utils/format';
@@ -11,6 +12,7 @@ export default function AccountLayout() {
   const { customer, logout } = useAuth();
   const { features } = useBusiness();
   const wishlist = useWishlist();
+  const chat = useChat();
   const navigate = useNavigate();
   const { data } = useAsync((signal) => account.dashboard({ signal }), []);
 
@@ -23,6 +25,7 @@ export default function AccountLayout() {
     { to: '/account/refund', icon: 'refund', label: 'Returns & Refunds' },
     { to: '/account/wallet', icon: 'wallet', label: 'Wallet' },
     features.user_wishlist && { to: '/account/wishlist', icon: 'heart', label: 'Wishlist', badge: wishlist.count || undefined },
+    features.customer_live_chat && { to: '/account/chat', icon: 'chat', label: 'Chat with us', badge: chat.unread || undefined },
     features.enable_customer_point_commission && { to: '/account/points', icon: 'star', label: 'Earning Points', badge: data?.customer?.point_balance || undefined },
   ].filter(Boolean);
 

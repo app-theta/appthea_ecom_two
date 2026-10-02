@@ -9,6 +9,7 @@ import SearchPanel from './SearchPanel';
 import FloatingButtons from './FloatingButtons';
 import Toast from './Toast';
 import NewsletterPopup from './NewsletterPopup';
+import ChatWidget from './chat/ChatWidget';
 import { useCart } from '../context/CartContext';
 import { useBusiness } from '../context/BusinessContext';
 
@@ -40,6 +41,7 @@ export default function Layout() {
       </main>
       <Footer />
       <FloatingButtons />
+      <ChatWidget />
       <MobileMenu />
       <SearchPanel />
       <QuickView />
