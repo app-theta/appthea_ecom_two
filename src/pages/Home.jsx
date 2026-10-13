@@ -2,12 +2,14 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Icon } from '../components/Icons';
 import ProductCard from '../components/ProductCard';
+import CampaignHero from '../components/CampaignHero';
+import Countdown from '../components/Countdown';
 import Img from '../components/Img';
 import { FEATURES } from '../data/products';
 import { useBusiness } from '../context/BusinessContext';
 import { useAsync } from '../hooks/useAsync';
 import { useSeoMeta } from '../hooks/useSeoMeta';
-import { home } from '../api/endpoints';
+import { home, deals } from '../api/endpoints';
 import { paginated, imageUrl } from '../utils/product';
 
 function Hero({ slides }) {
@@ -72,10 +74,48 @@ export default function Home() {
   const { categories, sliders } = useBusiness();
   const summary = useAsync((signal) => home.summary({ per_page: 8 }, { signal }), []);
   const arrivals = paginated(summary.data?.latest).rows;
+  // both come priced at the deal / campaign price; each reloads when its countdown ends
+  const campaigns = useAsync((signal) => deals.campaigns({ products: 8 }, { signal }), []);
+  const hotDeals = useAsync((signal) => deals.hotDeals({ signal }), []);
+  const campaignList = Array.isArray(campaigns.data?.campaigns) ? campaigns.data.campaigns : [];
+  const hotRows = Array.isArray(hotDeals.data?.products) ? hotDeals.data.products : [];
 
   return (
     <>
       <Hero slides={sliders} />
+
+      {campaignList.map((c) => (
+        <section className="section section--tight" key={c.id}>
+          <div className="container">
+            <CampaignHero campaign={c} onEnd={campaigns.reload} />
+            {c.products?.length > 0 && (
+              <div className="product-grid" style={{ marginTop: 'var(--sp-6)' }}>
+                {c.products.map((p) => <ProductCard product={p} key={p.id} />)}
+              </div>
+            )}
+          </div>
+        </section>
+      ))}
+
+      {hotRows.length > 0 && (
+        <section className="section section--tight hot-deals">
+          <div className="container">
+            <div className="section-head">
+              <h2>Hot Deals</h2>
+              <p>Special prices - only until the timer runs out</p>
+            </div>
+            {hotDeals.data?.ends_at && (
+              <div className="hot-deals__timer">
+                <span className="hot-deals__label">Ends in</span>
+                <Countdown endsAt={hotDeals.data.ends_at} onEnd={hotDeals.reload} />
+              </div>
+            )}
+            <div className="product-grid">
+              {hotRows.map((p) => <ProductCard product={p} key={p.id} />)}
+            </div>
+          </div>
+        </section>
+      )}
 
       <section className="features">
         <div className="container">

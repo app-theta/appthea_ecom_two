@@ -5,6 +5,7 @@ import ProtectedRoute from './routes/ProtectedRoute';
 import Home from './pages/Home';
 import Shop from './pages/Shop';
 import ProductDetails from './pages/ProductDetails';
+import Campaign from './pages/Campaign';
 import Reels from './pages/Reels';
 import Policy from './pages/Policy';
 import CartPage from './pages/CartPage';
@@ -38,6 +39,7 @@ export default function App() {
         <Route path="shop" element={<Shop />} />
         <Route path="shop/:category" element={<Shop />} />
         <Route path="product/:id" element={<ProductDetails />} />
+        <Route path="campaign/:slug" element={<Campaign />} />
         <Route path="reels" element={<Reels />} />
         <Route path="reels/:slug" element={<Reels />} />
         <Route path="privacy" element={<Policy field="privacy_policy" title="Privacy Policy" />} />

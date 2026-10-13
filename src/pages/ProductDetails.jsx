@@ -4,6 +4,7 @@ import { Icon } from '../components/Icons';
 import Img from '../components/Img';
 import Qty from '../components/Qty';
 import ProductCard from '../components/ProductCard';
+import Countdown from '../components/Countdown';
 import ReviewSection from '../components/ReviewSection';
 import ComboTiers from '../components/ComboTiers';
 import BundleSelector from '../components/BundleSelector';
@@ -29,7 +30,7 @@ export default function ProductDetails() {
   const wishlist = useWishlist();
   const chat = useChat();
 
-  const { data: product, loading, error } = useAsync((signal) => catalog.product(slug, { signal }), [slug]);
+  const { data: product, loading, error, reload } = useAsync((signal) => catalog.product(slug, { signal }), [slug]);
 
   const [index, setIndex] = useState(0);
   const [colourCode, setColourCode] = useState(null);
@@ -75,6 +76,8 @@ export default function ProductDetails() {
 
   const images = productImages(product);
   const price = selectedBarcode ? barcodePrice(selectedBarcode) : { now: 0, was: 0 };
+  // the chosen variant's campaign - or, before one is chosen, the product's
+  const campaign = selectedBarcode ? selectedBarcode.campaign : product.campaign;
   const available = selectedBarcode
     ? (selectedBarcode.stock_qty == null || Number(selectedBarcode.stock_qty) > 0)
     : barcodes.length > 0;
@@ -229,6 +232,12 @@ export default function ProductDetails() {
               </button>
             )}
           </div>
+          {campaign && (
+            <Link to={`/campaign/${campaign.slug}`} className="pd-campaign">
+              <span className="pd-campaign__name"><Icon.bolt width="14" height="14" /> {campaign.title}</span>
+              <span>Ends in <Countdown endsAt={campaign.ends_at} variant="inline" onEnd={reload} /></span>
+            </Link>
+          )}
           <div className="pd-price">
             BDT {money(price.now)}
             {price.was > 0 && <s>BDT {money(price.was)}</s>}

@@ -33,6 +33,11 @@ export default function ProductCard({ product }) {
         <Img className="img-main" src={images[0]} alt={product.name} />
         <Img className="img-alt" src={images[1] || images[0]} alt={product.name + ' alternate view'} />
         {discount > 0 && <span className="badge-discount">-{discount}%</span>}
+        {product.campaign && !soldOut && (
+          <span className="badge-campaign" title={product.campaign.title}>
+            <Icon.bolt width="12" height="12" /> {product.campaign.title}
+          </span>
+        )}
         {soldOut && <span className="badge-soldout">Sold Out</span>}
         {features.user_wishlist && (
           <button

@@ -33,6 +33,8 @@ export const Icon = {
   file: (p) => <svg viewBox="0 0 24 24" {...s} {...p}><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" /><path d="M14 3v6h6" /></svg>,
   shop: (p) => <svg viewBox="0 0 24 24" {...s} {...p}><path d="M4 10v10h16V10" /><path d="M2.5 10 4.5 4h15l2 6a3 3 0 0 1-5.8 0 3 3 0 0 1-5.4 0 3 3 0 0 1-5.8 0Z" /><path d="M10 20v-5h4v5" /></svg>,
   block: (p) => <svg viewBox="0 0 24 24" {...s} {...p}><circle cx="12" cy="12" r="9" /><path d="m5.6 5.6 12.8 12.8" /></svg>,
+  bolt: (p) => <svg viewBox="0 0 24 24" fill="currentColor" stroke="none" {...p}><path d="M13.5 2 4 13.5h6.5L9.5 22 20 9.5h-6.6z" /></svg>,
+  arrowRight: (p) => <svg viewBox="0 0 24 24" {...s} strokeWidth="2" {...p}><path d="M5 12h14M13 6l6 6-6 6" /></svg>,
   checkAll: (p) => <svg viewBox="0 0 24 24" {...s} strokeWidth="2" {...p}><path d="m2 13 4 4 8-9M10 17l1 1 10-11" /></svg>,
   smile: (p) => <svg viewBox="0 0 24 24" {...s} {...p}><circle cx="12" cy="12" r="9" /><path d="M8.5 14a4.5 4.5 0 0 0 7 0M9 9.5h.01M15 9.5h.01" strokeWidth="2.2" /></svg>,
   messenger: (p) => <svg viewBox="0 0 24 24" fill="currentColor" {...p}><path d="M12 2C6.3 2 2 6.2 2 11.5c0 2.9 1.3 5.5 3.4 7.2V22l3.2-1.8c.9.3 1.9.4 3 .4 5.7 0 10-4.2 10-9.5S17.7 2 12 2Zm1 12.3-2.6-2.7-4.9 2.7 5.4-5.7 2.6 2.7 4.8-2.7-5.3 5.7Z" /></svg>,
