@@ -71,14 +71,15 @@ function Hero({ slides }) {
 
 export default function Home() {
   useSeoMeta('home');
-  const { categories, sliders } = useBusiness();
+  const { categories, sliders, features } = useBusiness();
   const summary = useAsync((signal) => home.summary({ per_page: 8 }, { signal }), []);
   const arrivals = paginated(summary.data?.latest).rows;
-  // both come priced at the deal / campaign price; each reloads when its countdown ends
-  const campaigns = useAsync((signal) => deals.campaigns({ products: 8 }, { signal }), []);
-  const hotDeals = useAsync((signal) => deals.hotDeals({ signal }), []);
-  const campaignList = Array.isArray(campaigns.data?.campaigns) ? campaigns.data.campaigns : [];
-  const hotRows = Array.isArray(hotDeals.data?.products) ? hotDeals.data.products : [];
+  // both come priced at the deal / campaign price; each reloads when its countdown ends.
+  // A section the store switched off is neither fetched nor shown.
+  const campaigns = useAsync((signal) => deals.campaigns({ products: 8 }, { signal }), [], { skip: !features.enable_campaign });
+  const hotDeals = useAsync((signal) => deals.hotDeals({ signal }), [], { skip: !features.enable_hotdeal_product });
+  const campaignList = features.enable_campaign && Array.isArray(campaigns.data?.campaigns) ? campaigns.data.campaigns : [];
+  const hotRows = features.enable_hotdeal_product && Array.isArray(hotDeals.data?.products) ? hotDeals.data.products : [];
 
   return (
     <>
