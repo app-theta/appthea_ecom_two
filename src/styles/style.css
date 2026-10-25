@@ -10,6 +10,7 @@
     --accent: #7b3ff2;
     --accent-soft: #f3ecff;
     --topbar-bg: #000000;
+    --topbar-text: #ffffff;
     --radius: 10px;
     --header-h: 76px;
     --ff-body: "Inter", sans-serif;
@@ -47,6 +48,11 @@
     --surface-2: #faf9fc;
     --muted: #8b8b97;
     --accent-dark: #6631d4;
+    /* brand shades: a business's own colour (Website Theme) recomputes these,
+       see src/theme/websiteTheme.js; these are the design's own */
+    --accent-rgb: 123, 63, 242;
+    --accent-contrast: #ffffff;
+    --accent-deep: #4b1fa8;
 
     /* --- status --- */
     --red: #e11d48;
@@ -194,7 +200,7 @@ p {
 .topbar {
     height: var(--marquee-h);
     background: var(--topbar-bg);
-    color: #fff;
+    color: var(--topbar-text);
     display: flex;
     align-items: center;
     overflow: hidden;
@@ -350,7 +356,7 @@ p {
     height: 18px;
     padding: 0 5px;
     background: var(--accent);
-    color: #fff;
+    color: var(--accent-contrast, #fff);
     font-size: var(--fs-3xs);
     font-weight: var(--fw-bold);
     border-radius: var(--radius-pill);
@@ -694,7 +700,7 @@ p {
     left: var(--sp-3);
     z-index: 3;
     background: var(--accent);
-    color: #fff;
+    color: var(--accent-contrast, #fff);
     font-size: var(--fs-3xs);
     font-weight: var(--fw-bold);
     padding: 3px var(--sp-2);
@@ -757,7 +763,7 @@ p {
 .btn-addcart:hover {
     background: var(--accent);
     border-color: var(--accent);
-    color: #fff;
+    color: var(--accent-contrast, #fff);
 }
 
 .btn-addcart:disabled {
@@ -784,12 +790,12 @@ p {
 
 .btn--primary {
     background: var(--accent);
-    color: #fff;
+    color: var(--accent-contrast, #fff);
 }
 
 .btn--primary:hover {
     background: var(--accent-dark);
-    color: #fff;
+    color: var(--accent-contrast, #fff);
 }
 
 .btn--dark {
@@ -799,7 +805,7 @@ p {
 
 .btn--dark:hover {
     background: var(--accent);
-    color: #fff;
+    color: var(--accent-contrast, #fff);
 }
 
 .btn--outline {
@@ -1285,7 +1291,7 @@ p {
 
 .fab--messenger {
     background: var(--accent);
-    color: #fff;
+    color: var(--accent-contrast, #fff);
 }
 
 .fab--cart {
@@ -1414,7 +1420,7 @@ p {
 .pagination button.is-active {
     background: var(--accent);
     border-color: var(--accent);
-    color: #fff;
+    color: var(--accent-contrast, #fff);
 }
 
 .pagination button:disabled {
@@ -1598,7 +1604,7 @@ p {
 
 .btn-copy {
     background: var(--accent);
-    color: #fff;
+    color: var(--accent-contrast, #fff);
     border: 0;
     border-radius: var(--radius-sm);
     padding: var(--sp-2) var(--sp-4);
@@ -2320,6 +2326,7 @@ p {
 .footer-social a:hover {
     background: var(--accent);
     border-color: var(--accent);
+    color: var(--accent-contrast);
 }
 
 .footer-social svg {
@@ -2603,7 +2610,7 @@ p {
 
 .account-nav a.is-active .account-nav__badge {
     background: var(--accent);
-    color: #fff;
+    color: var(--accent-contrast, #fff);
 }
 
 .account-head {
@@ -2886,7 +2893,7 @@ table.data th.num {
 }
 
 .wallet-card {
-    background: linear-gradient(135deg, var(--accent), #4b1fa8);
+    background: linear-gradient(135deg, var(--accent), var(--accent-deep));
     color: #fff;
     border-radius: var(--radius-lg);
     padding: var(--sp-8) var(--sp-6);
@@ -3783,7 +3790,7 @@ table.data th.num {
 /* ---------------------------------------------------------------- live chat with the store */
 .chat-fab {
     background: var(--accent);
-    color: #fff;
+    color: var(--accent-contrast, #fff);
     cursor: pointer;
     transition: transform var(--transition), background var(--transition);
 }
@@ -4070,7 +4077,7 @@ table.data th.num {
 
 .chat-msg.is-mine .chat-bubble {
     background: var(--accent);
-    color: #fff;
+    color: var(--accent-contrast, #fff);
     border-radius: 14px 14px 4px 14px;
 }
 
@@ -4308,7 +4315,7 @@ table.data th.num {
     border: 0;
     border-radius: var(--radius-pill);
     background: var(--accent);
-    color: #fff;
+    color: var(--accent-contrast, #fff);
     cursor: pointer;
 }
 
